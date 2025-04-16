@@ -217,6 +217,7 @@ bool JsonLoader::appendArrayValue(Array& array, const Object& parameter) {
     Control Functions For Parsing / Exporting / Clearing JSON Database
 */
 
+
 bool JsonLoader::parseData(const char* data, size_t length) {
     rapidjson::Document& config = _jsonData;
     clearData();
@@ -238,6 +239,32 @@ bool JsonLoader::parseData(const char* data, size_t length) {
     return true;
 }
 
+bool JsonLoader::parseObject(const char* data, size_t length, rapidjson::Value& config) {
+    rapidjson::Document tmp;
+    tmp.SetNull();
+    config.SetNull();
+    tmp.Parse(data, length);
+    if(tmp.GetParseError() != rapidjson::ParseErrorCode::kParseErrorNone){
+        if(displayErrors){
+            std::cout << "JSON Failed to parse - Error @" << tmp.GetErrorOffset()
+                        << " -> " << rapidjson::GetParseError_En(tmp.GetParseError()) << "\n";
+        }
+        return false;
+    }
+
+    config.CopyFrom(tmp, _jsonData.GetAllocator(), true);
+
+    return true;
+}
+
+bool JsonLoader::parseString(const std::string& str) {
+    return parseData(str.c_str(), str.size());
+}
+
+bool JsonLoader::parseStringObject(const std::string& str, rapidjson::Value& config) {
+    return parseObject(str.c_str(), str.size(), config);
+}
+
 bool JsonLoader::exportData(const rapidjson::Value& config, std::string& output) const {
     rapidjson::StringBuffer buf;
     rapidjson::Writer<rapidjson::StringBuffer> writer(buf);
@@ -255,6 +282,10 @@ bool JsonLoader::exportData(const rapidjson::Value& config, std::string& output)
 
 bool JsonLoader::exportData(std::string& output) const {
     return exportData(_jsonData, output);
+}
+
+std::string JsonLoader::toString() const {
+    return toString(_jsonData);
 }
 
 std::string JsonLoader::toString(const rapidjson::Value& config) const {

@@ -233,11 +233,19 @@ public:
 
     bool parseData(const char* data, size_t length);
 
+    bool parseObject(const char* data, size_t length, rapidjson::Value& config);
+
+    bool parseString(const std::string& str);
+
+    bool parseStringObject(const std::string& str, rapidjson::Value& config);
+
     bool exportData(const rapidjson::Value& config, std::string& output) const;
 
     bool exportData(std::string& output) const;
 
-    std::string toString(const rapidjson::Value& config=_jsonData) const
+    std::string toString(const rapidjson::Value& config) const;
+
+    std::string toString() const;
 
     void clearData();
 
