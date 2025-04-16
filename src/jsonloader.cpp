@@ -238,7 +238,7 @@ bool JsonLoader::parseData(const char* data, size_t length) {
     return true;
 }
 
-bool JsonLoader::exportData(const rapidjson::Value& config, std::string& output) {
+bool JsonLoader::exportData(const rapidjson::Value& config, std::string& output) const {
     rapidjson::StringBuffer buf;
     rapidjson::Writer<rapidjson::StringBuffer> writer(buf);
     if(!config.Accept(writer)){
@@ -253,8 +253,14 @@ bool JsonLoader::exportData(const rapidjson::Value& config, std::string& output)
     return true;
 }
 
-bool JsonLoader::exportData(std::string& output) {
+bool JsonLoader::exportData(std::string& output) const {
     return exportData(_jsonData, output);
+}
+
+std::string JsonLoader::toString(const rapidjson::Value& config) const {
+    std::string ret;
+    exportData(config, ret);
+    return ret;
 }
 
 void JsonLoader::clearData() {
