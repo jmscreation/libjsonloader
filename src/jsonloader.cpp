@@ -229,7 +229,7 @@ namespace json {
         return true;
     }
 
-    bool exportData(const rapidjson::Value& config, std::string& output) {
+    bool exportData(const rapidjson::Value& config, std::string& output) const {
         rapidjson::StringBuffer buf;
         rapidjson::Writer<rapidjson::StringBuffer> writer(buf);
         if(!config.Accept(writer)){
@@ -244,8 +244,14 @@ namespace json {
         return true;
     }
 
-    bool exportData(std::string& output) {
+    bool exportData(std::string& output) const {
         return exportData(_jsonData, output);
+    }
+
+    std::string toString(const rapidjson::Value& config) const {
+        std::string ret;
+        exportData(config, ret);
+        return ret;
     }
 
     void clearData() {
