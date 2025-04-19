@@ -1,0 +1,12 @@
+{
+    "name":"Joe Smith",
+    "age":20,
+    "hobbies":{
+        "programming":5,
+        "videogames":3,
+        "woodwork":2
+    },
+    "inventory":[
+        "laptop","bag","candy bar"
+    ]
+}
